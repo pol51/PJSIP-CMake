@@ -6,12 +6,13 @@ set(target_name PJSIP)
 
 set(cmake_verbose_makefile off)
 
-set(PJSIP_SUBDIRECTORY pjlib/build pjlib-util/build)
+set(PJSIP_SUBDIRECTORY pjlib/build pjlib-util/build pjnath/build)
 
 set(PJSIP_INCLUDES
   .
   pjlib/include/
-  pjlib-util/include/)
+  pjlib-util/include/
+  pjnath/include)
 
 include_directories(${CMAKE_FIND_ROOT_PATH}/usr/include})
 include_directories(after system ${PJSIP_INCLUDES} ${CMAKE_BINARY_DIR})
