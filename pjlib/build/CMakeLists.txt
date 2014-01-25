@@ -68,4 +68,4 @@ if(TARGET_LINUX)
     ../include/pj/compat/os_linux.h)
 endif()
 
-add_library(pjlib ${PJLIB_SRC} ${PJLIB_INC})
+add_library(pjlib OBJECT ${PJLIB_SRC} ${PJLIB_INC})
