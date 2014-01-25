@@ -41,5 +41,4 @@ set(PJLIB-UTIL_INC
   ../include/pjlib-util/stun_simple.h
   ../include/pjlib-util/xml.h)
 
-add_library(pjlib-util ${PJLIB-UTIL_SRC} ${PJLIB-UTIL_INC})
-target_link_libraries(pjlib-util pjlib)
+add_library(pjlib-util OBJECT ${PJLIB-UTIL_SRC} ${PJLIB-UTIL_INC})
