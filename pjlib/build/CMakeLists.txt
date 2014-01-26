@@ -40,6 +40,8 @@ set(PJLIB_INC
   ../include/pj/config_site.h
   ../include/pj/config_site_sample.h
   ../include/pj/errno.h
+  ../include/pj/file_access.h
+  ../include/pj/file_io.h
   ../include/pj/ip_helper.h
   ../include/pj/lock.h
   ../include/pj/log.h
@@ -57,12 +59,16 @@ set(PJLIB_INC
 if(TARGET_LINUX)
   set(PJLIB_SRC ${PJLIB_SRC}
     ../src/pj/addr_resolv_sock.c
+    ../src/pj/file_access_unistd.c
+    ../src/pj/file_io_ansi.c
     ../src/pj/ioqueue_select.c
+    ../src/pj/log_writer_stdout.c
     ../src/pj/os_core_unix.c
     ../src/pj/os_error_unix.c
     ../src/pj/os_time_unix.c
     ../src/pj/os_timestamp_posix.c
-    ../src/pj/sock_bsd.c)
+    ../src/pj/sock_bsd.c
+    ../src/pj/sock_qos_bsd.c)
 
   set(PJLIB_INC ${PJLIB_INC}
     ../include/pj/compat/os_linux.h)
