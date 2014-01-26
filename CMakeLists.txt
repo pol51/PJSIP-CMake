@@ -24,6 +24,7 @@ set(WITH_RESAMPLE_LIBSAMPLERATE OFF CACHE BOOL "enable libsamplerate ressampling
 set(WITH_PASSTHROUGH_CODECS     OFF CACHE BOOL "enable passthrough codecs")
 set(WITH_CODEC_SPEEX            OFF CACHE BOOL "enable speex codec")
 set(WITH_CODEC_ILBC             OFF CACHE BOOL "enable ilbc codec")
+set(WITH_CODEC_IPP              OFF CACHE BOOL "enable ipp codecs")               # TODO: test ON
 set(WITH_CODEC_GSM              OFF CACHE BOOL "enable gsm codec")
 set(WITH_CODEC_G722             OFF CACHE BOOL "enable g722 codec")
 set(WITH_CODEC_G7221            OFF CACHE BOOL "enable g7221 codec")
@@ -34,7 +35,12 @@ set(WITH_AEC_SPEEX              OFF CACHE BOOL "enable speex aec")
 # auto-fix incompatibles options
 if(NOT WITH_CODEC_SPEEX AND WITH_AEC_SPEEX)
   set(WITH_AEC_SPEEX OFF)
-  message(WARNING "disabling WITH_AEC_SPEEX as WITH_CODEC_SPEEX is OFF...")
+  message(WARNING "disabling WITH_AEC_SPEEX because WITH_CODEC_SPEEX is OFF...")
+endif()
+
+if(WITH_CODEC_G7221 AND WITH_CODEC_IPP)
+  set(WITH_CODEC_G7221 OFF)
+  message(WARNING "disabling WITH_CODEC_G7221 because WITH_CODEC_IPP is ON...")
 endif()
 
 ################################################################################
@@ -88,6 +94,12 @@ else()
   add_definitions(-DPJMEDIA_HAS_ILBC_CODEC=0)
 endif()
 
+if(WITH_CODEC_IPP)
+  add_definitions(-DPJMEDIA_HAS_INTEL_IPP=1)
+else()
+  add_definitions(-DPJMEDIA_HAS_INTEL_IPP=0)
+endif()
+
 if(WITH_CODEC_GSM)
   add_definitions(-DPJMEDIA_HAS_GSM_CODEC=1)
 else()
@@ -138,18 +150,20 @@ endif()
 ################################################################################
 # Print summary
 ################################################################################
-message("Target OS:   ${CMAKE_SYSTEM_NAME}")
+message("Target OS:     ${CMAKE_SYSTEM_NAME}")
 message("Options:")
-message("- SRTP:      ${WITH_SRTP}")
-message("- Speex AEC: ${WITH_AEC_SPEEX}")
+message("- SRTP:        ${WITH_SRTP}")
+message("- Speex AEC:   ${WITH_AEC_SPEEX}")
 message("Codecs:")
-message("- speex:     ${WITH_CODEC_SPEEX}")
-message("- gsm:       ${WITH_CODEC_GSM}")
-message("- ilbc:      ${WITH_CODEC_ILBC}")
-message("- g722:      ${WITH_CODEC_G722}")
-message("- g7221:     ${WITH_CODEC_G7221}")
-message("- L16:       ${WITH_CODEC_L16}")
-message("Resampling:  ${RESAMPLING_NAME}")
+message("- passthrough: ${WITH_PASSTHROUGH_CODECS}")
+message("- speex:       ${WITH_CODEC_SPEEX}")
+message("- gsm:         ${WITH_CODEC_GSM}")
+message("- ilbc:        ${WITH_CODEC_ILBC}")
+message("- intel ipp:   ${WITH_CODEC_IPP}")
+message("- g722:        ${WITH_CODEC_G722}")
+message("- g7221:       ${WITH_CODEC_G7221}")
+message("- L16:         ${WITH_CODEC_L16}")
+message("Resampling:    ${RESAMPLING_NAME}")
 
 
 ################################################################################
