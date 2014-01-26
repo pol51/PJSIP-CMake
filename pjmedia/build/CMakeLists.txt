@@ -90,4 +90,23 @@ if(WITH_CODEC_ILBC)
     ../src/pjmedia-codec/ilbc.c)
 endif()
 
+if(WITH_CODEC_L16)
+  set(PJMEDIA-CODECS_SRC ${PJMEDIA-CODECS_SRC}
+    ../src/pjmedia-codec/l16.c)
+endif()
+
+if(WITH_CODEC_G722)
+  set(PJMEDIA-CODECS_SRC ${PJMEDIA-CODECS_SRC}
+    ../src/pjmedia-codec/g722.c
+    ../src/pjmedia-codec/g722/g722_dec.c
+    ../src/pjmedia-codec/g722/g722_enc.c)
+endif()
+
+if(WITH_CODEC_G7221)
+  set(PJMEDIA-CODECS_SRC ${PJMEDIA-CODECS_SRC}
+    ../src/pjmedia-codec/g7221.c
+    ../src/pjmedia-codec/g7221_sdp_match.c)
+  include_directories(AFTER SYSTEM ../../third_party/)
+endif()
+
 add_library(pjmedia OBJECT ${PJMEDIA_SRC} ${PJMEDIA_INC} ${PJMEDIA-AUDIODEV_SRC} ${PJMEDIA-CODECS_SRC})
