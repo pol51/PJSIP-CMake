@@ -95,6 +95,11 @@ if(WITH_CODEC_ILBC)
     ../src/pjmedia-codec/ilbc.c)
 endif()
 
+if(WITH_CODEC_IPP)
+  set(PJMEDIA-CODECS_SRC ${PJMEDIA-CODECS_SRC}
+    ../src/pjmedia-codec/ipp_codecs.c)
+endif()
+
 if(WITH_CODEC_L16)
   set(PJMEDIA-CODECS_SRC ${PJMEDIA-CODECS_SRC}
     ../src/pjmedia-codec/l16.c)
