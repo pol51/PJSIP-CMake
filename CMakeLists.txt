@@ -21,6 +21,7 @@ set(WITH_AUDIODEV_WMME          OFF CACHE BOOL "enable WMME audio device")      
 set(WITH_RESAMPLE_LIBRESAMPLE   OFF CACHE BOOL "enable libresample ressampling")
 set(WITH_RESAMPLE_LIBSAMPLERATE OFF CACHE BOOL "enable libsamplerate ressampling")# TODO: test ON
 
+set(WITH_PASSTHROUGH_CODECS     OFF CACHE BOOL "enable passthrough codecs")
 set(WITH_CODEC_SPEEX            OFF CACHE BOOL "enable speex codec")
 set(WITH_CODEC_ILBC             OFF CACHE BOOL "enable ilbc codec")
 set(WITH_CODEC_GSM              OFF CACHE BOOL "enable gsm codec")
@@ -67,6 +68,12 @@ elseif(WITH_RESAMPLE_LIBSAMPLERATE)
 else()
   add_definitions(-DPJMEDIA_RESAMPLE_IMP=PJMEDIA_RESAMPLE_NONE)
   set(RESAMPLING_NAME "none")
+endif()
+
+if(WITH_PASSTHROUGH_CODECS)
+  add_definitions(-DPJMEDIA_HAS_PASSTHROUGH_CODECS=1)
+else()
+  add_definitions(-DPJMEDIA_HAS_PASSTHROUGH_CODECS=0)
 endif()
 
 if(WITH_CODEC_SPEEX)
