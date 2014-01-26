@@ -24,8 +24,9 @@ set(WITH_RESAMPLE_LIBSAMPLERATE OFF CACHE BOOL "enable libsamplerate ressampling
 set(WITH_CODEC_SPEEX            OFF CACHE BOOL "enable speex codec")
 set(WITH_CODEC_ILBC             OFF CACHE BOOL "enable ilbc codec")
 set(WITH_CODEC_GSM              OFF CACHE BOOL "enable gsm codec")
-set(WITH_CODEC_G722             OFF CACHE BOOL "enable g722 codec")               # TODO: test ON
-set(WITH_CODEC_L16              OFF CACHE BOOL "enable l16 codec")                # TODO: test ON
+set(WITH_CODEC_G722             OFF CACHE BOOL "enable g722 codec")
+set(WITH_CODEC_G7221            OFF CACHE BOOL "enable g7221 codec")
+set(WITH_CODEC_L16              OFF CACHE BOOL "enable l16 codec")
 
 set(WITH_AEC_SPEEX              OFF CACHE BOOL "enable speex aec")
 
@@ -92,6 +93,12 @@ else()
   add_definitions(-DPJMEDIA_HAS_G722_CODEC=0)
 endif()
 
+if(WITH_CODEC_G7221)
+  add_definitions(-DPJMEDIA_HAS_G7221_CODEC=1)
+else()
+  add_definitions(-DPJMEDIA_HAS_G7221_CODEC=0)
+endif()
+
 if(WITH_CODEC_L16)
   add_definitions(-DPJMEDIA_HAS_L16_CODEC=1)
 else()
@@ -133,6 +140,7 @@ message("- speex:     ${WITH_CODEC_SPEEX}")
 message("- gsm:       ${WITH_CODEC_GSM}")
 message("- ilbc:      ${WITH_CODEC_ILBC}")
 message("- g722:      ${WITH_CODEC_G722}")
+message("- g7221:     ${WITH_CODEC_G7221}")
 message("- L16:       ${WITH_CODEC_L16}")
 message("Resampling:  ${RESAMPLING_NAME}")
 
