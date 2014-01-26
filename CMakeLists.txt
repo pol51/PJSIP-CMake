@@ -1,21 +1,123 @@
 cmake_minimum_required(VERSION 2.8.8)
 
-project(pjsip)
+project(pjproject)
 
+################################################################################
+# build options
+################################################################################
+
+# miscs
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
-# os specific
-set(TARGET_LINUX OFF CACHE BOOL "target os is linux")
+# targeted OS
+set(TARGET_LINUX  OFF CACHE BOOL "target OS is Linux")
 
-if(TARGET_LINUX)
-  set(CMAKE_SYSTEM_NAME Linux)
-  add_definitions(-DPJ_LINUX=1 -DPA_USE_ALSA=1 -DPA_USE_OSS=0 -DHAVE_SYS_SOUNDCARD_H)
-  set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} -fPIC)
-  set(OS_LIBS asound ssl rt m)
+# features
+set(WITH_SRTP                   ON  CACHE BOOL "enable SRTP")
+
+set(WITH_AUDIODEV_PORTAUDIO     OFF CACHE BOOL "enable portaudio audio device")   # TODO: test ON
+set(WITH_AUDIODEV_WMME          OFF CACHE BOOL "enable WMME audio device")        # TODO: test ON
+
+set(WITH_RESAMPLE_LIBRESAMPLE   OFF CACHE BOOL "enable libresample ressampling")
+set(WITH_RESAMPLE_LIBSAMPLERATE OFF CACHE BOOL "enable libsamplerate ressampling")# TODO: test ON
+
+set(WITH_CODEC_SPEEX            OFF CACHE BOOL "enable speex codec")              # TODO: test ON
+set(WITH_CODEC_ILBC             OFF CACHE BOOL "enable ilbc codec")               # TODO: test ON
+set(WITH_CODEC_GSM              OFF CACHE BOOL "enable gsm codec")                # TODO: test ON
+set(WITH_CODEC_G722             OFF CACHE BOOL "enable g722 codec")               # TODO: test ON
+set(WITH_CODEC_l16              OFF CACHE BOOL "enable l16 codec")                # TODO: test ON
+
+set(WITH_AEC_SPEEX              OFF CACHE BOOL "enable speex aec")                # TODO: test ON
+
+################################################################################
+# Features specific
+################################################################################
+
+if(WITH_SRTP)
+  add_definitions(-DPJMEDIA_HAS_SRTP=1)
+else()
+  add_definitions(-DPJMEDIA_HAS_SRTP=0)
 endif()
 
-# subfolders
-set(PJSIP_SUBDIRECTORIES pjlib pjlib-util pjnath pjmedia)
+if(WITH_AUDIODEV_PORTAUDIO)
+  add_definitions(-DPJMEDIA_AUDIO_DEV_HAS_PORTAUDIO=1)
+else()
+  add_definitions(-DPJMEDIA_AUDIO_DEV_HAS_PORTAUDIO=0)
+endif()
+
+if(WITH_AUDIODEV_WMME)
+  add_definitions(-DPJMEDIA_AUDIO_DEV_HAS_WMME=1)
+else()
+  add_definitions(-DPJMEDIA_AUDIO_DEV_HAS_WMME=0)
+endif()
+
+if(WITH_RESAMPLE_LIBRESAMPLE)
+  add_definitions(-DPJMEDIA_RESAMPLE_IMP=PJMEDIA_RESAMPLE_LIBRESAMPLE)
+elseif(WITH_RESAMPLE_LIBSAMPLERATE)
+  add_definitions(-DPJMEDIA_RESAMPLE_IMP=PJMEDIA_RESAMPLE_LIBSAMPLERATE)
+else()
+  add_definitions(-DPJMEDIA_RESAMPLE_IMP=PJMEDIA_RESAMPLE_NONE)
+endif()
+
+if(WITH_CODEC_SPEEX)
+  add_definitions(-DPJMEDIA_HAS_SPEEX_CODEC=1)
+else()
+  add_definitions(-DPJMEDIA_HAS_SPEEX_CODEC=0)
+endif()
+
+if(WITH_CODEC_ILBC)
+  add_definitions(-DPJMEDIA_HAS_ILBC_CODEC=1)
+else()
+  add_definitions(-DPJMEDIA_HAS_ILBC_CODEC=0)
+endif()
+
+if(WITH_CODEC_GSM)
+  add_definitions(-DPJMEDIA_HAS_GSM_CODEC=1)
+else()
+  add_definitions(-DPJMEDIA_HAS_GSM_CODEC=0)
+endif()
+
+if(WITH_CODEC_G722)
+  add_definitions(-DPJMEDIA_HAS_G722_CODEC=1)
+else()
+  add_definitions(-DPJMEDIA_HAS_G722_CODEC=0)
+endif()
+
+if(WITH_CODEC_L16)
+  add_definitions(-DPJMEDIA_HAS_L16_CODEC=1)
+else()
+  add_definitions(-DPJMEDIA_HAS_L16_CODEC=0)
+endif()
+
+if(WITH_AEC_SPEEX)
+  add_definitions(-DPJMEDIA_HAS_SPEEX_AEC=1)
+else()
+  add_definitions(-DPJMEDIA_HAS_SPEEX_AEC=0)
+endif()
+
+
+################################################################################
+# OS specific
+################################################################################
+
+# Linux
+if(TARGET_LINUX)
+  set(CMAKE_SYSTEM_NAME Linux)
+  add_definitions(-DPJ_LINUX=1)
+  set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} -fPIC)
+  set(OS_LIBS rt m pthread)
+  if(WITH_SRTP)
+    set(OS_LIBS ${OS_LIBS} ssl)
+  endif()
+endif()
+
+
+################################################################################
+# Common
+################################################################################
+
+# sub-directories
+set(PJSIP_SUBDIRECTORIES pjlib pjlib-util pjnath pjmedia pjsip)
 
 foreach(SUBDIRECTORY ${PJSIP_SUBDIRECTORIES})
   set(PJSIP_INCLUDES ${PJSIP_INCLUDES} ${SUBDIRECTORY}/include/)
@@ -29,6 +131,12 @@ foreach(SUBDIRECTORY ${PJSIP_SUBDIRECTORIES})
   set(TARGET_OBJECTS_LIST ${TARGET_OBJECTS_LIST} $<TARGET_OBJECTS:${SUBDIRECTORY}>)
 endforeach()
 
-# target
-add_library(${PROJECT_NAME} SHARED ${TARGET_OBJECTS_LIST} ${THIRDPARTY_OBJECTS_LIST})
+# build target
+add_library(${PROJECT_NAME} STATIC ${TARGET_OBJECTS_LIST} ${THIRDPARTY_OBJECTS_LIST})
 target_link_libraries(${PROJECT_NAME} ${OS_LIBS})
+
+file(GLOB PJSUA-APP_SRC pjsip-apps/src/pjsua/pjsua_app*)
+set(PJSUA-APP_SRC ${PJSUA-APP_SRC}
+  pjsip-apps/src/pjsua/main.c)
+add_executable(pjsua ${PJSUA-APP_SRC})
+target_link_libraries(pjsua ${PROJECT_NAME})
