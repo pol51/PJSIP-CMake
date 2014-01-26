@@ -29,6 +29,8 @@ set(WITH_CODEC_GSM              OFF CACHE BOOL "enable gsm codec")
 set(WITH_CODEC_G722             OFF CACHE BOOL "enable g722 codec")
 set(WITH_CODEC_G7221            OFF CACHE BOOL "enable g7221 codec")
 set(WITH_CODEC_L16              OFF CACHE BOOL "enable l16 codec")
+set(WITH_CODEC_AMRNB            OFF CACHE BOOL "enable amr narrowband codec")
+set(WITH_CODEC_AMRWB            OFF CACHE BOOL "enable amr wideband codec")
 
 set(WITH_AEC_SPEEX              OFF CACHE BOOL "enable speex aec")
 
@@ -38,14 +40,28 @@ if(NOT WITH_CODEC_SPEEX AND WITH_AEC_SPEEX)
   message(WARNING "disabling WITH_AEC_SPEEX because WITH_CODEC_SPEEX is OFF...")
 endif()
 
+if(WITH_CODEC_AMRWB OR WITH_CODEC_AMRNB)
+  if(WITH_CODEC_IPP)
+    set(WITH_CODEC_IPP OFF)
+    message(WARNING "disabling WITH_CODEC_IPP because WITH_CODEC_AMRWB or WITH_CODEC_AMRNB is ON...")
+  endif()
+  if(WITH_PASSTHROUGH_CODECS)
+    set(WITH_PASSTHROUGH_CODECS OFF)
+    message(WARNING "disabling WITH_PASSTHROUGH_CODECS because WITH_CODEC_AMRWB or WITH_CODEC_AMRNB is ON...")
+  endif()
+endif()
+
 if(WITH_CODEC_G7221 AND WITH_CODEC_IPP)
   set(WITH_CODEC_G7221 OFF)
   message(WARNING "disabling WITH_CODEC_G7221 because WITH_CODEC_IPP is ON...")
 endif()
 
+
 ################################################################################
 # Features specific
 ################################################################################
+
+set(CODEC_LIBS)
 
 if(WITH_SRTP)
   add_definitions(-DPJMEDIA_HAS_SRTP=1)
@@ -130,6 +146,20 @@ else()
   add_definitions(-DPJMEDIA_HAS_SPEEX_AEC=0)
 endif()
 
+if(WITH_CODEC_AMRNB)
+  add_definitions(-DPJMEDIA_HAS_OPENCORE_AMRNB_CODEC=1)
+  set(CODEC_LIBS ${CODEC_LIBS} opencore-amrnb)
+else()
+  add_definitions(-DPJMEDIA_HAS_OPENCORE_AMRNB_CODEC=0)
+endif()
+
+if(WITH_CODEC_AMRWB)
+  add_definitions(-DPJMEDIA_HAS_OPENCORE_AMRWB_CODEC=1)
+  set(CODEC_LIBS ${CODEC_LIBS} opencore-amrwb)
+else()
+  add_definitions(-DPJMEDIA_HAS_OPENCORE_AMRWB_CODEC=0)
+endif()
+
 
 ################################################################################
 # OS specific
@@ -150,20 +180,22 @@ endif()
 ################################################################################
 # Print summary
 ################################################################################
-message("Target OS:     ${CMAKE_SYSTEM_NAME}")
+message("Target OS:       ${CMAKE_SYSTEM_NAME}")
 message("Options:")
-message("- SRTP:        ${WITH_SRTP}")
-message("- Speex AEC:   ${WITH_AEC_SPEEX}")
+message("- SRTP:          ${WITH_SRTP}")
+message("- Speex AEC:     ${WITH_AEC_SPEEX}")
 message("Codecs:")
-message("- passthrough: ${WITH_PASSTHROUGH_CODECS}")
-message("- speex:       ${WITH_CODEC_SPEEX}")
-message("- gsm:         ${WITH_CODEC_GSM}")
-message("- ilbc:        ${WITH_CODEC_ILBC}")
-message("- intel ipp:   ${WITH_CODEC_IPP}")
-message("- g722:        ${WITH_CODEC_G722}")
-message("- g7221:       ${WITH_CODEC_G7221}")
-message("- L16:         ${WITH_CODEC_L16}")
-message("Resampling:    ${RESAMPLING_NAME}")
+message("- passthrough:   ${WITH_PASSTHROUGH_CODECS}")
+message("- speex:         ${WITH_CODEC_SPEEX}")
+message("- gsm:           ${WITH_CODEC_GSM}")
+message("- ilbc:          ${WITH_CODEC_ILBC}")
+message("- intel ipp:     ${WITH_CODEC_IPP}")
+message("- g722:          ${WITH_CODEC_G722}")
+message("- g7221:         ${WITH_CODEC_G7221}")
+message("- l16:           ${WITH_CODEC_L16}")
+message("- amr narrowband:${WITH_CODEC_AMRNB}")
+message("- amr wideband:  ${WITH_CODEC_AMRWB}")
+message("Resampling:      ${RESAMPLING_NAME}")
 
 
 ################################################################################
@@ -187,7 +219,7 @@ endforeach()
 
 # build target
 add_library(${PROJECT_NAME} STATIC ${TARGET_OBJECTS_LIST} ${THIRDPARTY_OBJECTS_LIST})
-target_link_libraries(${PROJECT_NAME} ${OS_LIBS})
+target_link_libraries(${PROJECT_NAME} ${OS_LIBS} ${CODEC_LIBS})
 
 file(GLOB PJSUA-APP_SRC pjsip-apps/src/pjsua/pjsua_app*)
 set(PJSUA-APP_SRC ${PJSUA-APP_SRC}
