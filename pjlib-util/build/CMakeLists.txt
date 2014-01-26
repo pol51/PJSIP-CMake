@@ -1,5 +1,8 @@
 set(PJLIB-UTIL_SRC
   ../src/pjlib-util/base64.c
+  ../src/pjlib-util/cli.c
+  ../src/pjlib-util/cli_console.c
+  ../src/pjlib-util/cli_telnet.c
   ../src/pjlib-util/crc32.c
   ../src/pjlib-util/dns.c
   ../src/pjlib-util/dns_dump.c
@@ -23,6 +26,10 @@ set(PJLIB-UTIL_SRC
 set(PJLIB-UTIL_INC
   ../include/pjlib-util.h
   ../include/pjlib-util/base64.h
+  ../include/pjlib-util/cli.h
+  ../include/pjlib-util/cli_console.h
+  ../include/pjlib-util/cli_imp.h
+  ../include/pjlib-util/cli_telnet.h
   ../include/pjlib-util/crc32.h
   ../include/pjlib-util/dns.h
   ../include/pjlib-util/dns_server.h
