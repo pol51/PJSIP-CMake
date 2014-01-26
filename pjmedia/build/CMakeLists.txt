@@ -76,4 +76,19 @@ if(WITH_AUDIODEV_PORTAUDIO)
     ../src/pjmedia-audiodev/pa_dev.c)
 endif()
 
+if(WITH_CODEC_GSM)
+  set(PJMEDIA-CODECS_SRC ${PJMEDIA-CODECS_SRC}
+    ../src/pjmedia-codec/gsm.c)
+endif()
+
+if(WITH_CODEC_SPEEX)
+  set(PJMEDIA-CODECS_SRC ${PJMEDIA-CODECS_SRC}
+    ../src/pjmedia-codec/speex_codec.c)
+endif()
+
+if(WITH_CODEC_ILBC)
+  set(PJMEDIA-CODECS_SRC ${PJMEDIA-CODECS_SRC}
+    ../src/pjmedia-codec/ilbc.c)
+endif()
+
 add_library(pjmedia OBJECT ${PJMEDIA_SRC} ${PJMEDIA_INC} ${PJMEDIA-AUDIODEV_SRC} ${PJMEDIA-CODECS_SRC})
