@@ -25,7 +25,7 @@ set(WITH_CODEC_SPEEX            OFF CACHE BOOL "enable speex codec")            
 set(WITH_CODEC_ILBC             OFF CACHE BOOL "enable ilbc codec")               # TODO: test ON
 set(WITH_CODEC_GSM              OFF CACHE BOOL "enable gsm codec")                # TODO: test ON
 set(WITH_CODEC_G722             OFF CACHE BOOL "enable g722 codec")               # TODO: test ON
-set(WITH_CODEC_l16              OFF CACHE BOOL "enable l16 codec")                # TODO: test ON
+set(WITH_CODEC_L16              OFF CACHE BOOL "enable l16 codec")                # TODO: test ON
 
 set(WITH_AEC_SPEEX              OFF CACHE BOOL "enable speex aec")                # TODO: test ON
 
@@ -53,10 +53,13 @@ endif()
 
 if(WITH_RESAMPLE_LIBRESAMPLE)
   add_definitions(-DPJMEDIA_RESAMPLE_IMP=PJMEDIA_RESAMPLE_LIBRESAMPLE)
+  set(RESAMPLING_NAME "resample")
 elseif(WITH_RESAMPLE_LIBSAMPLERATE)
   add_definitions(-DPJMEDIA_RESAMPLE_IMP=PJMEDIA_RESAMPLE_LIBSAMPLERATE)
+  set(RESAMPLING_NAME "libsamplerate")
 else()
   add_definitions(-DPJMEDIA_RESAMPLE_IMP=PJMEDIA_RESAMPLE_NONE)
+  set(RESAMPLING_NAME "none")
 endif()
 
 if(WITH_CODEC_SPEEX)
@@ -110,6 +113,22 @@ if(TARGET_LINUX)
     set(OS_LIBS ${OS_LIBS} ssl)
   endif()
 endif()
+
+
+################################################################################
+# Print summary
+################################################################################
+message("Target OS:   ${CMAKE_SYSTEM_NAME}")
+message("Options:")
+message("- SRTP:      ${WITH_SRTP}")
+message("- Speex AEC: ${WITH_AEC_SPEEX}")
+message("Codecs:")
+message("- speex:     ${WITH_CODEC_SPEEX}")
+message("- gsm:       ${WITH_CODEC_GSM}")
+message("- ilbc:      ${WITH_CODEC_ILBC}")
+message("- g722:      ${WITH_CODEC_G722}")
+message("- L16:       ${WITH_CODEC_L16}")
+message("Resampling:  ${RESAMPLING_NAME}")
 
 
 ################################################################################
