@@ -119,4 +119,10 @@ if(WITH_CODEC_G7221)
   include_directories(AFTER SYSTEM ../../third_party/)
 endif()
 
+if(WITH_CODEC_AMRWB OR WITH_CODEC_AMRNB)
+  set(PJMEDIA-CODECS_SRC ${PJMEDIA-CODECS_SRC}
+    ../src/pjmedia-codec/opencore_amr.c
+    ../src/pjmedia-codec/amr_sdp_match.c)
+endif()
+
 add_library(pjmedia OBJECT ${PJMEDIA_SRC} ${PJMEDIA_INC} ${PJMEDIA-AUDIODEV_SRC} ${PJMEDIA-CODECS_SRC})
