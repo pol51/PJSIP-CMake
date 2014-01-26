@@ -15,7 +15,7 @@ set(TARGET_LINUX  OFF CACHE BOOL "target OS is Linux")
 # features
 set(WITH_SRTP                   ON  CACHE BOOL "enable SRTP")
 
-set(WITH_AUDIODEV_PORTAUDIO     OFF CACHE BOOL "enable portaudio audio device")   # TODO: test ON
+set(WITH_AUDIODEV_PORTAUDIO     OFF CACHE BOOL "enable portaudio audio device")
 set(WITH_AUDIODEV_WMME          OFF CACHE BOOL "enable WMME audio device")        # TODO: test ON
 
 set(WITH_RESAMPLE_LIBRESAMPLE   OFF CACHE BOOL "enable libresample ressampling")
