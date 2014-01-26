@@ -26,10 +26,7 @@ set(PJLIB_SRC
   ../src/pj/string.c
   ../src/pj/timer.c
   ../src/pj/types.c
-  ../src/pj/sock_select.c
-  ../src/pj/ssl_sock_common.c
-  ../src/pj/ssl_sock_dump.c
-  ../src/pj/ssl_sock_ossl.c)
+  ../src/pj/sock_select.c)
 
 set(PJLIB_INC
   ../include/pj/activesock.h
@@ -55,6 +52,13 @@ set(PJLIB_INC
   ../include/pj/compat/socket.h
   ../include/pj/compat/stdarg.h
   ../include/pj/compat/string.h)
+
+if(WITH_SSL)
+  set(PJLIB_SRC ${PJLIB_SRC}
+  ../src/pj/ssl_sock_common.c
+  ../src/pj/ssl_sock_dump.c
+  ../src/pj/ssl_sock_ossl.c)
+endif()
 
 if(TARGET_LINUX)
   set(PJLIB_SRC ${PJLIB_SRC}
