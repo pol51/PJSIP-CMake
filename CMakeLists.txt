@@ -21,13 +21,19 @@ set(WITH_AUDIODEV_WMME          OFF CACHE BOOL "enable WMME audio device")      
 set(WITH_RESAMPLE_LIBRESAMPLE   OFF CACHE BOOL "enable libresample ressampling")
 set(WITH_RESAMPLE_LIBSAMPLERATE OFF CACHE BOOL "enable libsamplerate ressampling")# TODO: test ON
 
-set(WITH_CODEC_SPEEX            OFF CACHE BOOL "enable speex codec")              # TODO: test ON
-set(WITH_CODEC_ILBC             OFF CACHE BOOL "enable ilbc codec")               # TODO: test ON
-set(WITH_CODEC_GSM              OFF CACHE BOOL "enable gsm codec")                # TODO: test ON
+set(WITH_CODEC_SPEEX            OFF CACHE BOOL "enable speex codec")
+set(WITH_CODEC_ILBC             OFF CACHE BOOL "enable ilbc codec")
+set(WITH_CODEC_GSM              OFF CACHE BOOL "enable gsm codec")
 set(WITH_CODEC_G722             OFF CACHE BOOL "enable g722 codec")               # TODO: test ON
 set(WITH_CODEC_L16              OFF CACHE BOOL "enable l16 codec")                # TODO: test ON
 
-set(WITH_AEC_SPEEX              OFF CACHE BOOL "enable speex aec")                # TODO: test ON
+set(WITH_AEC_SPEEX              OFF CACHE BOOL "enable speex aec")
+
+# auto-fix incompatibles options
+if(NOT WITH_CODEC_SPEEX AND WITH_AEC_SPEEX)
+  set(WITH_AEC_SPEEX OFF)
+  message(WARNING "disabling WITH_AEC_SPEEX as WITH_CODEC_SPEEX is OFF...")
+endif()
 
 ################################################################################
 # Features specific
