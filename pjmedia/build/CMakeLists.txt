@@ -13,6 +13,7 @@ set(PJMEDIA_SRC
   ../src/pjmedia/echo_suppress.c
   ../src/pjmedia/endpoint.c
   ../src/pjmedia/errno.c
+  ../src/pjmedia/format.c
   ../src/pjmedia/g711.c
   ../src/pjmedia/jbuf.c
   ../src/pjmedia/master_port.c
@@ -37,12 +38,14 @@ set(PJMEDIA_SRC
   ../src/pjmedia/sound_port.c
   ../src/pjmedia/stereo_port.c
   ../src/pjmedia/stream.c
+  ../src/pjmedia/stream_info.c
+  ../src/pjmedia/stream_common.c
   ../src/pjmedia/tonegen.c
   ../src/pjmedia/transport_adapter_sample.c
   ../src/pjmedia/transport_ice.c
   ../src/pjmedia/transport_loop.c
-  ../src/pjmedia/transport_srtp.c
   ../src/pjmedia/transport_udp.c
+  ../src/pjmedia/types.c
   ../src/pjmedia/wav_player.c
   ../src/pjmedia/wav_playlist.c
   ../src/pjmedia/wav_writer.c
@@ -50,7 +53,26 @@ set(PJMEDIA_SRC
   ../src/pjmedia/wsola.c
 )
 
-file(GLOB_RECURSE PJMEDIA_INC ../include/*.h)
-include_directories(AFTER SYSTEM ../../third_party/srtp/include ../../third_party/srtp/crypto/include ../../third_party/build/srtp)
+set(PJMEDIA-AUDIODEV_SRC
+  ../src/pjmedia-audiodev/audiodev.c
+  ../src/pjmedia-audiodev/errno.c
+  ../src/pjmedia-audiodev/legacy_dev.c
+  ../src/pjmedia-audiodev/null_dev.c)
 
-add_library(pjmedia OBJECT ${PJMEDIA_SRC} ${PJMEDIA_INC})
+set(PJMEDIA-CODECS_SRC
+  ../src/pjmedia-codec/audio_codecs.c)
+
+file(GLOB_RECURSE PJMEDIA_INC ../include/*.h)
+
+if(WITH_SRTP)
+  set(PJMEDIA_SRC ${PJMEDIA_SRC}
+    ../src/pjmedia/transport_srtp.c)
+  include_directories(AFTER SYSTEM ../../third_party/srtp/include ../../third_party/srtp/crypto/include ../../third_party/build/srtp)
+endif()
+
+if(WITH_AUDIODEV_PORTAUDIO)
+  set(PJMEDIA-AUDIODEV_SRC ${PJMEDIA-AUDIODEV_SRC}
+    ../src/pjmedia-audiodev/pa_dev.c)
+endif()
+
+add_library(pjmedia OBJECT ${PJMEDIA_SRC} ${PJMEDIA_INC} ${PJMEDIA-AUDIODEV_SRC} ${PJMEDIA-CODECS_SRC})
