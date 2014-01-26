@@ -1,0 +1,6 @@
+[submodule "third_party/portaudio"]
+	path = third_party/portaudio
+	url = https://github.com/pol51/portaudio.git
+[submodule "third_party/openssl"]
+	path = third_party/openssl
+	url = git@github.com:pol51/OpenSSL-CMake.git
