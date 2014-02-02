@@ -17,6 +17,7 @@ set(WITH_SRTP                   ON  CACHE BOOL "enable SRTP")
 set(WITH_SSL                    ON  CACHE BOOL "enable SSL")
 
 set(WITH_AUDIODEV_PORTAUDIO     OFF CACHE BOOL "enable portaudio audio device")
+set(WITH_AUDIODEV_ALSA          OFF CACHE BOOL "enable alsa audio device")
 set(WITH_AUDIODEV_WMME          OFF CACHE BOOL "enable WMME audio device")        # TODO: test ON
 
 set(WITH_RESAMPLE_LIBRESAMPLE   OFF CACHE BOOL "enable libresample ressampling")
@@ -78,6 +79,7 @@ endif()
 
 if(WITH_AUDIODEV_PORTAUDIO)
   add_definitions(-DPJMEDIA_AUDIO_DEV_HAS_PORTAUDIO=1)
+  set(AUDIODEV_LIBS ${AUDIODEV_LIBS} asound)
 else()
   add_definitions(-DPJMEDIA_AUDIO_DEV_HAS_PORTAUDIO=0)
 endif()
@@ -86,6 +88,13 @@ if(WITH_AUDIODEV_WMME)
   add_definitions(-DPJMEDIA_AUDIO_DEV_HAS_WMME=1)
 else()
   add_definitions(-DPJMEDIA_AUDIO_DEV_HAS_WMME=0)
+endif()
+
+if(WITH_AUDIODEV_ALSA)
+  add_definitions(-DPJMEDIA_AUDIO_DEV_HAS_ALSA=1)
+  set(AUDIODEV_LIBS ${AUDIODEV_LIBS} asound)
+else()
+  add_definitions(-DPJMEDIA_AUDIO_DEV_HAS_ALSA=0)
 endif()
 
 if(WITH_RESAMPLE_LIBRESAMPLE)
@@ -175,7 +184,7 @@ endif()
 # Linux
 if(TARGET_LINUX)
   set(CMAKE_SYSTEM_NAME Linux)
-  add_definitions(-DPJ_LINUX=1)
+  add_definitions(-DPJ_LINUX=1 -DPJ_SOCK_HAS_GETADDRINFO=1 -DPJ_SOCK_HAS_INET_ATON=1 -DPJ_SOCK_HAS_INET_PTON=1 -DPJ_SOCK_HAS_INET_NTOP=1)
   set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} -fPIC)
   set(OS_LIBS rt m pthread)
   if(WITH_SSL)
@@ -204,6 +213,7 @@ message("- l16:           ${WITH_CODEC_L16}")
 message("- amr narrowband:${WITH_CODEC_AMRNB}")
 message("- amr wideband:  ${WITH_CODEC_AMRWB}")
 message("Resampling:      ${RESAMPLING_NAME}")
+message("Audio dev libs:  ${AUDIODEV_LIBS}")
 
 
 ################################################################################
@@ -227,7 +237,7 @@ endforeach()
 
 # build target
 add_library(${PROJECT_NAME} STATIC ${TARGET_OBJECTS_LIST} ${THIRDPARTY_OBJECTS_LIST})
-target_link_libraries(${PROJECT_NAME} ${OS_LIBS} ${CODEC_LIBS})
+target_link_libraries(${PROJECT_NAME} ${OS_LIBS} ${CODEC_LIBS} ${AUDIODEV_LIBS})
 
 file(GLOB PJSUA-APP_SRC pjsip-apps/src/pjsua/pjsua_app*)
 set(PJSUA-APP_SRC ${PJSUA-APP_SRC}
