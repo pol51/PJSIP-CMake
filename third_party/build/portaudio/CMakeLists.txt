@@ -11,6 +11,15 @@ if(TARGET_LINUX)
   include_directories(AFTER SYSTEM ../../portaudio/src/os/unix/)
 endif()
 
+if(TARGET_MACOSX)
+  add_definitions(-DPA_USE_COREAUDIO=1)
+
+  file(GLOB_RECURSE portaudio_os_src
+    ../../portaudio/src/os/unix/*.c ../../portaudio/src/os/unix/*.h
+    ../../portaudio/include/pa_mac_core.h ../../portaudio/src/hostapi/coreaudio/*.c)
+  include_directories(AFTER SYSTEM ../../portaudio/src/os/unix/)
+endif()
+
 include_directories(AFTER SYSTEM  . ../../portaudio/include/ ../../portaudio/src/common/)
 
 add_library(portaudio OBJECT ${portaudio_src} ${portaudio_os_src})

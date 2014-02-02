@@ -60,7 +60,7 @@ if(WITH_SSL)
   ../src/pj/ssl_sock_ossl.c)
 endif()
 
-if(TARGET_LINUX)
+if(TARGET_LINUX OR TARGET_MACOSX)
   set(PJLIB_SRC ${PJLIB_SRC}
     ../src/pj/addr_resolv_sock.c
     ../src/pj/file_access_unistd.c
@@ -74,8 +74,13 @@ if(TARGET_LINUX)
     ../src/pj/sock_bsd.c
     ../src/pj/sock_qos_bsd.c)
 
-  set(PJLIB_INC ${PJLIB_INC}
-    ../include/pj/compat/os_linux.h)
+  if(TARGET_LINUX)
+    set(PJLIB_INC ${PJLIB_INC}
+      ../include/pj/compat/os_linux.h)
+  elseif(TARGET_MACOSX)
+    set(PJLIB_INC ${PJLIB_INC}
+      ../include/pj/compat/os_darwinos.h)
+  endif()
 endif()
 
 add_library(pjlib OBJECT ${PJLIB_SRC} ${PJLIB_INC})
