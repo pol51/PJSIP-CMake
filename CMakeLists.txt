@@ -175,7 +175,7 @@ endif()
 # Linux
 if(TARGET_LINUX)
   set(CMAKE_SYSTEM_NAME Linux)
-  add_definitions(-DPJ_LINUX=1)
+  add_definitions(-DPJ_LINUX=1 -DPJ_SOCK_HAS_GETADDRINFO=1 -DPJ_SOCK_HAS_INET_ATON=1 -DPJ_SOCK_HAS_INET_PTON=1 -DPJ_SOCK_HAS_INET_NTOP=1)
   set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} -fPIC)
   set(OS_LIBS rt m pthread)
   if(WITH_SSL)
