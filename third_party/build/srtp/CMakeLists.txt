@@ -37,6 +37,9 @@ file(GLOB_RECURSE SRTP_INC
   ../../srtp/include/*.h config.h)
 
 include_directories(AFTER SYSTEM  . ../../srtp/include/ ../../srtp/crypto/include/ ../../srtp)
+if(WITH_BUILTIN_OPENSSL)
+  include_directories(AFTER SYSTEM  ../..)
+endif()
 add_definitions(-DHAVE_CONFIG_H)
 
 add_library(srtp OBJECT ${SRTP_SRC} ${SRTP_INC})

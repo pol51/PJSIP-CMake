@@ -74,6 +74,7 @@ endif()
 if(WITH_AUDIODEV_PORTAUDIO)
   set(PJMEDIA-AUDIODEV_SRC ${PJMEDIA-AUDIODEV_SRC}
     ../src/pjmedia-audiodev/pa_dev.c)
+  include_directories(../../third_party/portaudio/include)
 endif()
 
 if(WITH_AUDIODEV_ALSA)
