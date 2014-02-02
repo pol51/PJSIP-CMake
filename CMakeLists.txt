@@ -183,6 +183,16 @@ if(TARGET_LINUX)
   endif()
 endif()
 
+# Mac OS X
+if(TARGET_MACOSX)
+  set(CMAKE_SYSTEM_NAME Darwin)
+  add_definitions(-DPJ_DARWINOS=1 -DPJ_HAS_SEMAPHORE_H=1 -DPJ_SOCK_HAS_INET_ATON=1 -DPJ_SOCK_HAS_INET_PTON=1 -DPJ_SOCK_HAS_INET_NTOP=1)
+  set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} -fPIC)
+  set(OS_LIBS)
+  if(WITH_SSL)
+    set(OS_LIBS ${OS_LIBS} ssl crypto)
+  endif()
+endif()
 
 ################################################################################
 # Print summary
