@@ -1,0 +1,3 @@
+set(BUILD_OBJECT_LIBRARY_ONLY ON)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../../openssl ${CMAKE_CURRENT_BINARY_DIR}/openssl)
+
