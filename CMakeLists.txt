@@ -194,6 +194,15 @@ if(TARGET_MACOSX)
   endif()
 endif()
 
+# Windows
+if(TARGET_WIN32)
+  set(CMAKE_SYSTEM_NAME Windows)
+  add_definitions(-DPJ_WIN32=1)
+  set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS})
+  set(OS_LIBS)
+endif()
+
+
 ################################################################################
 # Print summary
 ################################################################################
