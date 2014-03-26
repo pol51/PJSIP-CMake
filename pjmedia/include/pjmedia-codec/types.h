@@ -67,6 +67,7 @@ enum pjmedia_audio_pt
     PJMEDIA_RTP_PT_SILK_MB,			/**< SILK mediumband/12KHz  */
     PJMEDIA_RTP_PT_SILK_WB,			/**< SILK wideband/16KHz    */
     PJMEDIA_RTP_PT_SILK_SWB,			/**< SILK 24KHz		    */
+    PJMEDIA_RTP_PT_OPUS,
     PJMEDIA_RTP_PT_ILBC,			/**< iLBC (13.3/15.2Kbps)   */
     PJMEDIA_RTP_PT_AMR,				/**< AMR (4.75 - 12.2Kbps)  */
     PJMEDIA_RTP_PT_AMRWB,			/**< AMRWB (6.6 - 23.85Kbps)*/
@@ -83,7 +84,6 @@ enum pjmedia_audio_pt
     PJMEDIA_RTP_PT_G7221C_48,			/**< G722.1 Annex C (48Kbps)*/
     PJMEDIA_RTP_PT_G7221_RSV1,			/**< G722.1 reserve	    */
     PJMEDIA_RTP_PT_G7221_RSV2,			/**< G722.1 reserve	    */
-    PJMEDIA_RTP_PT_OPUS,			/**< OPUS                   */
     PJMEDIA_RTP_PT_L16_8KHZ_MONO,		/**< L16 @ 8KHz, mono	    */
     PJMEDIA_RTP_PT_L16_8KHZ_STEREO,		/**< L16 @ 8KHz, stereo     */
     //PJMEDIA_RTP_PT_L16_11KHZ_MONO,		/**< L16 @ 11KHz, mono	    */

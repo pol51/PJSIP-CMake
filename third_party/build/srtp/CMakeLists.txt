@@ -1,6 +1,5 @@
 file(GLOB_RECURSE SRTP_SRC
   ../../srtp/srtp/*.c
-  ../../srtp/tables/*.c
   ../../srtp/pjlib/*.c
   ../../srtp/crypto/ae_xfm/*.c
   ../../srtp/crypto/cipher/*.c
