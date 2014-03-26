@@ -67,6 +67,7 @@ enum pjmedia_audio_pt
     PJMEDIA_RTP_PT_SILK_MB,			/**< SILK mediumband/12KHz  */
     PJMEDIA_RTP_PT_SILK_WB,			/**< SILK wideband/16KHz    */
     PJMEDIA_RTP_PT_SILK_SWB,			/**< SILK 24KHz		    */
+    PJMEDIA_RTP_PT_OPUS,
     PJMEDIA_RTP_PT_ILBC,			/**< iLBC (13.3/15.2Kbps)   */
     PJMEDIA_RTP_PT_AMR,				/**< AMR (4.75 - 12.2Kbps)  */
     PJMEDIA_RTP_PT_AMRWB,			/**< AMRWB (6.6 - 23.85Kbps)*/
