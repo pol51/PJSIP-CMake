@@ -109,6 +109,12 @@ if(WITH_CODEC_GSM)
     ../src/pjmedia-codec/gsm.c)
 endif()
 
+if(WITH_CODEC_OPUS)
+  set(PJMEDIA-CODECS_SRC ${PJMEDIA-CODECS_SRC}
+    ../src/pjmedia-codec/opus.c)
+  include_directories(AFTER SYSTEM ../../third_party/opus/include)
+endif()
+
 if(WITH_CODEC_SPEEX)
   set(PJMEDIA-CODECS_SRC ${PJMEDIA-CODECS_SRC}
     ../src/pjmedia-codec/speex_codec.c)
