@@ -38,11 +38,12 @@ set(WITH_CODEC_SPEEX            OFF CACHE BOOL "enable speex codec")
 set(WITH_CODEC_ILBC             OFF CACHE BOOL "enable ilbc codec")
 set(WITH_CODEC_IPP              OFF CACHE BOOL "enable ipp codecs")               # TODO: test ON
 set(WITH_CODEC_GSM              OFF CACHE BOOL "enable gsm codec")
-set(WITH_CODEC_G722             OFF CACHE BOOL "enable g722 codec")
+set(WITH_CODEC_G722             ON  CACHE BOOL "enable g722 codec")
 set(WITH_CODEC_G7221            OFF CACHE BOOL "enable g7221 codec")
 set(WITH_CODEC_L16              OFF CACHE BOOL "enable l16 codec")
 set(WITH_CODEC_AMRNB            OFF CACHE BOOL "enable amr narrowband codec")
 set(WITH_CODEC_AMRWB            OFF CACHE BOOL "enable amr wideband codec")
+set(WITH_CODEC_OPUS             OFF CACHE BOOL "enable opus codec")
 
 set(WITH_AEC_SPEEX              OFF CACHE BOOL "enable speex aec")
 
@@ -197,6 +198,22 @@ else()
   add_definitions(-DPJMEDIA_HAS_OPENCORE_AMRWB_CODEC=0)
 endif()
 
+if(WITH_CODEC_OPUS)
+  add_definitions(-DPJMEDIA_HAS_OPUS_CODEC=1)
+else()
+  add_definitions(-DPJMEDIA_HAS_OPUS_CODEC=0)
+endif()
+
+
+################################################################################
+# Hardware specific
+################################################################################
+if(WITH_FLOATING_POINT)
+  add_definitions(-DPJ_HAS_FLOATING_POINT=1)
+else()
+  add_definitions(-DPJ_HAS_FLOATING_POINT=0)
+endif()
+
 
 ################################################################################
 # OS specific
@@ -287,6 +304,7 @@ message("- g7221:         ${WITH_CODEC_G7221}")
 message("- l16:           ${WITH_CODEC_L16}")
 message("- amr narrowband:${WITH_CODEC_AMRNB}")
 message("- amr wideband:  ${WITH_CODEC_AMRWB}")
+message("- opus:          ${WITH_CODEC_OPUS}")
 message("Resampling:      ${RESAMPLING_NAME}")
 message("Audio dev libs:  ${AUDIODEV_LIBS}")
 
