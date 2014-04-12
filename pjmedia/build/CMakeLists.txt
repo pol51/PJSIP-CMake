@@ -75,6 +75,11 @@ if(WITH_AUDIODEV_PORTAUDIO)
     ../src/pjmedia-audiodev/pa_dev.c)
 endif()
 
+if(WITH_AUDIODEV_ALSA)
+  set(PJMEDIA-AUDIODEV_SRC ${PJMEDIA-AUDIODEV_SRC}
+    ../src/pjmedia-audiodev/alsa_dev.c)
+endif()
+
 if(WITH_PASSTHROUGH_CODECS)
   set(PJMEDIA-CODECS_SRC ${PJMEDIA-CODECS_SRC}
     ../src/pjmedia-codec/passthrough.c)
