@@ -59,7 +59,7 @@ debug_module_t mod_aes_cbc = {
 
 err_status_t
 aes_cbc_alloc(cipher_t **c, int key_len, int tlen) {
-  extern cipher_type_t aes_cbc;
+  extern cipher_type_t aes_cbc_cipher;
   uint8_t *pointer;
   int tmp;
 
@@ -78,11 +78,11 @@ aes_cbc_alloc(cipher_t **c, int key_len, int tlen) {
   /* set pointers */
   *c = (cipher_t *)pointer;
   (*c)->algorithm = AES_CBC;
-  (*c)->type = &aes_cbc;
+  (*c)->type = &aes_cbc_cipher;
   (*c)->state = pointer + sizeof(cipher_t);
 
   /* increment ref_count */
-  aes_cbc.ref_count++;
+  aes_cbc_cipher.ref_count++;
 
   /* set key size        */
   (*c)->key_len = key_len;
@@ -92,7 +92,7 @@ aes_cbc_alloc(cipher_t **c, int key_len, int tlen) {
 
 err_status_t
 aes_cbc_dealloc(cipher_t *c) {
-  extern cipher_type_t aes_cbc;
+  extern cipher_type_t aes_cbc_cipher;
 
   /* zeroize entire state*/
   octet_string_set_to_zero((uint8_t *)c, 
@@ -102,7 +102,7 @@ aes_cbc_dealloc(cipher_t *c) {
   crypto_free(c);
 
   /* decrement ref_count */
-  aes_cbc.ref_count--;
+  aes_cbc_cipher.ref_count--;
   
   return err_status_ok;  
 }
@@ -546,7 +546,7 @@ cipher_test_case_t aes_cbc_test_case_3 = {
   &aes_cbc_test_case_2                    /* pointer to next testcase */
 };
 
-cipher_type_t aes_cbc = {
+cipher_type_t aes_cbc_cipher = {
   (cipher_alloc_func_t)          aes_cbc_alloc,
   (cipher_dealloc_func_t)        aes_cbc_dealloc,  
   (cipher_init_func_t)           aes_cbc_context_init,
