@@ -65,6 +65,14 @@ set(PJMEDIA-CODECS_SRC
 file(GLOB_RECURSE PJMEDIA_INC ../include/*.h)
 
 if(WITH_SRTP)
+  if(WITH_BUILTIN_OPENSSL)
+    include_directories(BEFORE SYSTEM
+      ../../third_party
+      ../../third_party/openssl
+    ${CMAKE_CURRENT_BINARY_DIR}/../../third_party/build/openssl
+    ${CMAKE_CURRENT_BINARY_DIR}/../../third_party/build/openssl/openssl/crypto)
+  endif()
+
   set(PJMEDIA_SRC ${PJMEDIA_SRC}
     ../src/pjmedia/transport_srtp.c)
   include_directories(AFTER SYSTEM ../../third_party/srtp/include ../../third_party/srtp/crypto/include ../../third_party/build/srtp)
