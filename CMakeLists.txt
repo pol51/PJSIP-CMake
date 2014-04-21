@@ -79,7 +79,6 @@ endif()
 
 if(WITH_AUDIODEV_PORTAUDIO)
   add_definitions(-DPJMEDIA_AUDIO_DEV_HAS_PORTAUDIO=1)
-  set(AUDIODEV_LIBS ${AUDIODEV_LIBS} asound)
 else()
   add_definitions(-DPJMEDIA_AUDIO_DEV_HAS_PORTAUDIO=0)
 endif()
@@ -190,6 +189,9 @@ if(TARGET_LINUX)
   if(WITH_SSL)
     set(OS_LIBS ${OS_LIBS} ssl crypto)
   endif()
+  if(WITH_AUDIODEV_PORTAUDIO)
+    set(AUDIODEV_LIBS ${AUDIODEV_LIBS} asound)
+  endif()
 endif()
 
 # Mac OS X
@@ -258,8 +260,10 @@ endforeach()
 add_library(${PROJECT_NAME} STATIC ${TARGET_OBJECTS_LIST} ${THIRDPARTY_OBJECTS_LIST})
 target_link_libraries(${PROJECT_NAME} ${OS_LIBS} ${CODEC_LIBS} ${AUDIODEV_LIBS})
 
-file(GLOB PJSUA-APP_SRC pjsip-apps/src/pjsua/pjsua_app*)
-set(PJSUA-APP_SRC ${PJSUA-APP_SRC}
-  pjsip-apps/src/pjsua/main.c)
-add_executable(pjsua ${PJSUA-APP_SRC})
-target_link_libraries(pjsua ${PROJECT_NAME})
+if(BUILD_PJSUA-APP)
+  file(GLOB PJSUA-APP_SRC pjsip-apps/src/pjsua/pjsua_app*)
+  set(PJSUA-APP_SRC ${PJSUA-APP_SRC}
+    pjsip-apps/src/pjsua/main.c)
+  add_executable(pjsua ${PJSUA-APP_SRC})
+  target_link_libraries(pjsua ${PROJECT_NAME})
+endif()
