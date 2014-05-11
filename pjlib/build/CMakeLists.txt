@@ -6,7 +6,6 @@ set(PJLIB_SRC
   ../src/pj/errno.c
   ../src/pj/except.c
   ../src/pj/guid.c
-  ../src/pj/guid_simple.c
   ../src/pj/hash.c
   ../src/pj/ip_helper_generic.c
   ../src/pj/list.c
@@ -62,6 +61,14 @@ endif()
 
 if(WITH_BUILTIN_OPENSSL)
   include_directories(BEFORE SYSTEM ../../third_party/openssl ../../third_party ${CMAKE_BINARY_DIR}/third_party/build/openssl ${CMAKE_BINARY_DIR}/third_party/build/openssl/openssl/crypto)
+endif()
+
+if(WITH_UUID_LIB)
+  include_directories(AFTER SYSTEM ../../third_party/uuid)
+  add_definitions(-DHAVE_UUID_LIB=1)
+  set(PJLIB_SRC ${PJLIB_SRC} ../src/pj/guid_uuid.c)
+else()
+  set(PJLIB_SRC ${PJLIB_SRC} ../src/pj/guid_simple.c)
 endif()
 
 if(TARGET_LINUX OR TARGET_MACOSX OR TARGET_ANDROID OR TARGET_IOS)
