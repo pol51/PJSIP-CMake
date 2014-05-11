@@ -33,6 +33,8 @@ set(WITH_AUDIODEV_WMME          OFF CACHE BOOL "enable WMME audio device")      
 set(WITH_RESAMPLE_LIBRESAMPLE   OFF CACHE BOOL "enable libresample ressampling")
 set(WITH_RESAMPLE_LIBSAMPLERATE OFF CACHE BOOL "enable libsamplerate ressampling")# TODO: test ON
 
+set(WITH_UUID_LIB               ON  CACHE BOOL "enable libUUID for callId generation")
+
 set(WITH_PASSTHROUGH_CODECS     OFF CACHE BOOL "enable passthrough codecs")
 set(WITH_CODEC_SPEEX            OFF CACHE BOOL "enable speex codec")
 set(WITH_CODEC_ILBC             OFF CACHE BOOL "enable ilbc codec")
