@@ -10,7 +10,14 @@ project(pjproject)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
 # targeted OS
-set(TARGET_LINUX  OFF CACHE BOOL "target OS is Linux")
+set(TARGET_LINUX    OFF CACHE BOOL "target OS is Linux")
+set(TARGET_ANDROID  OFF CACHE BOOL "target OS is Android")
+set(TARGET_MACOSX   OFF CACHE BOOL "target OS is Mac OS X")
+set(TARGET_IOS      OFF CACHE BOOL "target OS is iOS")
+set(TARGET_WINDOWS  OFF CACHE BOOL "target OS is Windows")
+
+# build type
+set(PJSIP_STATIC_BUILD          OFF CACHE BOOL "enable static build")
 
 # features
 set(WITH_SRTP                   ON  CACHE BOOL "enable SRTP")
@@ -18,6 +25,7 @@ set(WITH_SSL                    ON  CACHE BOOL "enable SSL")
 set(WITH_BUILTIN_OPENSSL        OFF CACHE BOOL "enable built-in OpenSSL")
 
 set(WITH_AUDIODEV_PORTAUDIO     OFF CACHE BOOL "enable portaudio audio device")
+set(WITH_AUDIODEV_OPENSL        OFF CACHE BOOL "enable OpenSL audio device")
 set(WITH_AUDIODEV_ALSA          OFF CACHE BOOL "enable alsa audio device")
 set(WITH_AUDIODEV_WMME          OFF CACHE BOOL "enable WMME audio device")        # TODO: test ON
 
@@ -82,6 +90,12 @@ if(WITH_AUDIODEV_PORTAUDIO)
   add_definitions(-DPJMEDIA_AUDIO_DEV_HAS_PORTAUDIO=1)
 else()
   add_definitions(-DPJMEDIA_AUDIO_DEV_HAS_PORTAUDIO=0)
+endif()
+
+if(WITH_AUDIODEV_OPENSL)
+  add_definitions(-DPJMEDIA_AUDIO_DEV_HAS_OPENSL=1)
+else()
+  add_definitions(-DPJMEDIA_AUDIO_DEV_HAS_OPENSL=0)
 endif()
 
 if(WITH_AUDIODEV_WMME)
@@ -214,11 +228,35 @@ if(TARGET_WIN32)
   set(OS_LIBS)
 endif()
 
+# Android
+if(TARGET_ANDROID)
+  set(CMAKE_SYSTEM_NAME Android)
+  add_definitions(-DPJ_ANDROID=1 -DANDROID_ABI=${ANDROID_ABI} -DPJ_HAS_SEMAPHORE_H=1 -DPJ_SOCK_HAS_INET_ATON=1 -DPJ_SOCK_HAS_INET_PTON=1 -DPJ_SOCK_HAS_INET_NTOP=1 -DPJ_HAS_THREADS=1)
+
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fvisibility=hidden")
+
+  include_directories(SYSTEM ${ANDROID_NDK}/platforms/${ANDROID_LEVEL}/arch-arm/usr/include)
+
+  if(ANDROID_ABI STREQUAL "armeabi-v7a" OR ANDROID_ABI STREQUAL "armeabi")
+    add_definitions(-mno-thumb-interwork -DPJ_ANDROID_ARM=1 -D__ARM_EABI__)
+  endif()
+  if(ANDROID_ABI STREQUAL "x86")
+    add_definitions(-DPJ_ANDROID_X86=1)
+  endif()
+
+  set(OS_LIBS log z OpenSLES)
+endif()
 
 ################################################################################
 # Print summary
 ################################################################################
 message("Target OS:       ${CMAKE_SYSTEM_NAME}")
+if(TARGET_ANDROID)
+message("Android:")
+message("- NDK:           ${ANDROID_NDK}")
+message("- ABI:           ${ANDROID_ABI}")
+message("- API Level:     ${ANDROID_NATIVE_API_LEVEL}")
+endif()
 message("Options:")
 message("- SRTP:          ${WITH_SRTP}")
 message("- SSL:           ${WITH_SSL}")
@@ -258,7 +296,12 @@ foreach(SUBDIRECTORY ${PJSIP_SUBDIRECTORIES})
 endforeach()
 
 # build target
-add_library(${PROJECT_NAME} STATIC ${TARGET_OBJECTS_LIST} ${THIRDPARTY_OBJECTS_LIST})
+if(TARGET_ANDROID AND NOT PJSIP_STATIC_BUILD)
+  set(PROJECT_NAME sipCore)
+  add_library(${PROJECT_NAME} SHARED ${TARGET_OBJECTS_LIST} ${THIRDPARTY_OBJECTS_LIST})
+else()
+  add_library(${PROJECT_NAME} STATIC ${TARGET_OBJECTS_LIST} ${THIRDPARTY_OBJECTS_LIST})
+endif()
 target_link_libraries(${PROJECT_NAME} ${OS_LIBS} ${CODEC_LIBS} ${AUDIODEV_LIBS})
 
 if(BUILD_PJSUA-APP)
