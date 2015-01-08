@@ -129,6 +129,14 @@
 #   define PJ_ANDROID   1
 #   include <pj/compat/os_android.h>
 
+#elif defined(PJ_IOS) && PJ_IOS!=0
+/*
+     * iOS
+     */
+#   undef PJ_IOS
+#   define PJ_IOS   1
+#   include <pj/compat/os_ios.h>
+
 #elif defined(PJ_LINUX) || defined(linux) || defined(__linux)
     /*
      * Linux
@@ -269,7 +277,7 @@
 #   define PJ_IS_LITTLE_ENDIAN	0
 #   define PJ_IS_BIG_ENDIAN	1
 
-#elif defined(ARM) || defined(_ARM_) ||  defined(__arm__) || defined(_M_ARM)
+#elif defined(ARM) || defined(_ARM_) ||  defined(__arm__) || defined(_M_ARM) || defined(__arm64__)
 #   define PJ_HAS_PENTIUM	0
     /*
      * ARM, bi-endian, so raise error if endianness is not configured

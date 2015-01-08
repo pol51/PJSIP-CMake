@@ -85,6 +85,11 @@ if(WITH_AUDIODEV_PORTAUDIO)
   include_directories(../../third_party/portaudio/include)
 endif()
 
+if(WITH_AUDIODEV_COREAUDIO)
+  set(PJMEDIA-AUDIODEV_SRC ${PJMEDIA-AUDIODEV_SRC}
+    ../src/pjmedia-audiodev/coreaudio_dev.m)
+endif()
+
 if(WITH_AUDIODEV_OPENSL)
   set(PJMEDIA-AUDIODEV_SRC ${PJMEDIA-AUDIODEV_SRC}
     ../src/pjmedia-audiodev/opensl_dev.c)
