@@ -74,7 +74,7 @@ extern debug_module_t mod_alloc;
 extern cipher_type_t null_cipher;
 extern cipher_type_t aes_icm;
 #ifndef OPENSSL
-extern cipher_type_t aes_cbc;
+extern cipher_type_t aes_cbc_cipher;
 #else
 extern cipher_type_t aes_gcm_128_openssl;
 extern cipher_type_t aes_gcm_256_openssl;
@@ -166,7 +166,7 @@ crypto_kernel_init() {
   if (status) 
     return status;
 #ifndef OPENSSL
-  status = crypto_kernel_load_cipher_type(&aes_cbc, AES_CBC);
+  status = crypto_kernel_load_cipher_type(&aes_cbc_cipher, AES_CBC);
   if (status) 
     return status;
 #else

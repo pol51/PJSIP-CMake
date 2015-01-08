@@ -100,6 +100,12 @@ if(WITH_AUDIODEV_ALSA)
     ../src/pjmedia-audiodev/alsa_dev.c)
 endif()
 
+if(WITH_AUDIODEV_WMME)
+  set(PJMEDIA-AUDIODEV_SRC ${PJMEDIA-AUDIODEV_SRC}
+    ../src/pjmedia-audiodev/wmme_dev.c)
+  include_directories(../../third_party/portaudio/include)
+endif()
+
 if(WITH_PASSTHROUGH_CODECS)
   set(PJMEDIA-CODECS_SRC ${PJMEDIA-CODECS_SRC}
     ../src/pjmedia-codec/passthrough.c)
