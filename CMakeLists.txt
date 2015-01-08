@@ -25,6 +25,7 @@ set(WITH_SSL                    ON  CACHE BOOL "enable SSL")
 set(WITH_BUILTIN_OPENSSL        OFF CACHE BOOL "enable built-in OpenSSL")
 
 set(WITH_AUDIODEV_PORTAUDIO     OFF CACHE BOOL "enable portaudio audio device")
+set(WITH_AUDIODEV_COREAUDIO     OFF CACHE BOOL "enable coreaudio audio device")
 set(WITH_AUDIODEV_OPENSL        OFF CACHE BOOL "enable OpenSL audio device")
 set(WITH_AUDIODEV_ALSA          OFF CACHE BOOL "enable alsa audio device")
 set(WITH_AUDIODEV_WMME          OFF CACHE BOOL "enable WMME audio device")        # TODO: test ON
@@ -90,6 +91,12 @@ if(WITH_AUDIODEV_PORTAUDIO)
   add_definitions(-DPJMEDIA_AUDIO_DEV_HAS_PORTAUDIO=1)
 else()
   add_definitions(-DPJMEDIA_AUDIO_DEV_HAS_PORTAUDIO=0)
+endif()
+
+if(WITH_AUDIODEV_COREAUDIO)
+  add_definitions(-DPJMEDIA_AUDIO_DEV_HAS_COREAUDIO=1)
+else()
+  add_definitions(-DPJMEDIA_AUDIO_DEV_HAS_COREAUDIO=0)
 endif()
 
 if(WITH_AUDIODEV_OPENSL)
@@ -246,6 +253,13 @@ if(TARGET_ANDROID)
 
   set(OS_LIBS log z OpenSLES)
 endif()
+
+# iOS
+if(TARGET_IOS)
+  add_definitions(-DPJ_DARWINOS=1 -DPJ_IOS=1 -w -DPJ_HAS_SEMAPHORE_H=1 -DPJ_SOCK_HAS_INET_ATON=1 -DPJ_SOCK_HAS_INET_PTON=1 -DPJ_SOCK_HAS_INET_NTOP=1)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+endif()
+
 
 ################################################################################
 # Print summary
