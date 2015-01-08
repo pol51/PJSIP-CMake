@@ -121,6 +121,14 @@
      */
 #  include <pj/compat/os_linux_kernel.h>
 
+#elif defined(PJ_ANDROID) && PJ_ANDROID!=0
+    /*
+     * Android
+     */
+#   undef PJ_ANDROID
+#   define PJ_ANDROID   1
+#   include <pj/compat/os_android.h>
+
 #elif defined(PJ_LINUX) || defined(linux) || defined(__linux)
     /*
      * Linux
