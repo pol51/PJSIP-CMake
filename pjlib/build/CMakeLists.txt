@@ -60,7 +60,11 @@ if(WITH_SSL)
 endif()
 
 if(WITH_BUILTIN_OPENSSL)
-  include_directories(BEFORE SYSTEM ../../third_party/openssl ../../third_party ${CMAKE_BINARY_DIR}/third_party/build/openssl ${CMAKE_BINARY_DIR}/third_party/build/openssl/openssl/crypto)
+  include_directories(BEFORE SYSTEM
+    ../../third_party
+    ../../third_party/openssl
+	${CMAKE_CURRENT_BINARY_DIR}/../../third_party/build/openssl
+	${CMAKE_CURRENT_BINARY_DIR}/../../third_party/build/openssl/openssl/crypto)
 endif()
 
 if(WITH_UUID_LIB)
@@ -103,6 +107,20 @@ if(TARGET_LINUX OR TARGET_MACOSX OR TARGET_ANDROID OR TARGET_IOS)
     list(REMOVE_ITEM PJLIB_SRC ../src/pj/log_writer_stdout.c)
     set(PJLIB_SRC ${PJLIB_SRC} ../src/pj/log_writer_logcat.c)
   endif()
+endif()
+
+if(TARGET_WINDOWS)
+  set(PJLIB_SRC ${PJLIB_SRC}
+    ../src/pj/addr_resolv_sock.c
+    ../src/pj/file_access_win32.c
+    ../src/pj/file_io_win32.c
+    ../src/pj/log_writer_stdout.c
+    ../src/pj/os_core_win32.c
+    ../src/pj/os_error_win32.c
+    ../src/pj/os_time_win32.c
+    ../src/pj/os_timestamp_win32.c
+    ../src/pj/sock_bsd.c
+    ../src/pj/sock_qos_bsd.c)
 endif()
 
 add_library(pjlib OBJECT ${PJLIB_SRC} ${PJLIB_INC})
