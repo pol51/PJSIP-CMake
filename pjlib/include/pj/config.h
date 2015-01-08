@@ -104,6 +104,14 @@
 #   define PJ_ANDROID   1
 #   include <pj/compat/os_android.h>
 
+#elif defined(PJ_IOS) && PJ_IOS!=0
+/*
+     * iOS
+     */
+#   undef PJ_IOS
+#   define PJ_IOS   1
+#   include <pj/compat/os_ios.h>
+
 #elif defined(PJ_LINUX) || defined(linux) || defined(__linux)
     /*
      * Linux
