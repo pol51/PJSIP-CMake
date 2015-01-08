@@ -471,7 +471,7 @@ static pj_status_t opensl_create_stream(pjmedia_aud_dev_factory *f,
     struct opensl_aud_factory *pa = (struct opensl_aud_factory*)f;
     pj_pool_t *pool;
     struct opensl_aud_stream *stream;
-    pj_status_t status = PJ_SUCCESS;
+    pj_status_t status = PJMEDIA_EAUD_INVDEV;
     int i, bufferSize;
     SLresult result;
     SLDataFormat_PCM format_pcm;
@@ -537,7 +537,8 @@ static pj_status_t opensl_create_stream(pjmedia_aud_dev_factory *f,
                                                         numIface, ids, req);
         if (result != SL_RESULT_SUCCESS) {
             PJ_LOG(3, (THIS_FILE, "Cannot create audio player: %d", result));
-            goto on_error;
+            strm_destroy(&stream->base);
+            return status;
         }
 
 #ifdef __ANDROID__
@@ -561,7 +562,8 @@ static pj_status_t opensl_create_stream(pjmedia_aud_dev_factory *f,
                                                SL_BOOLEAN_FALSE);
         if (result != SL_RESULT_SUCCESS) {
             PJ_LOG(3, (THIS_FILE, "Cannot realize player : %d", result));
-            goto on_error;
+            strm_destroy(&stream->base);
+            return status;
         }
         
         /* Get the play interface */
@@ -570,7 +572,8 @@ static pj_status_t opensl_create_stream(pjmedia_aud_dev_factory *f,
                                                     &stream->playerPlay);
         if (result != SL_RESULT_SUCCESS) {
             PJ_LOG(3, (THIS_FILE, "Cannot get play interface"));
-            goto on_error;
+            strm_destroy(&stream->base);
+            return status;
         }
         
         /* Get the buffer queue interface */
@@ -579,7 +582,8 @@ static pj_status_t opensl_create_stream(pjmedia_aud_dev_factory *f,
                                                     &stream->playerBufQ);
         if (result != SL_RESULT_SUCCESS) {
             PJ_LOG(3, (THIS_FILE, "Cannot get buffer queue interface"));
-            goto on_error;
+            strm_destroy(&stream->base);
+            return status;
         }
         
         /* Get the volume interface */
@@ -593,7 +597,8 @@ static pj_status_t opensl_create_stream(pjmedia_aud_dev_factory *f,
                                                          (void *)stream);
         if (result != SL_RESULT_SUCCESS) {
             PJ_LOG(3, (THIS_FILE, "Cannot register player callback"));
-            goto on_error;
+            strm_destroy(&stream->base);
+            return status;
         }
         
         stream->playerBufferSize = bufferSize;
@@ -635,7 +640,8 @@ static pj_status_t opensl_create_stream(pjmedia_aud_dev_factory *f,
                                                           numIface, ids, req);
         if (result != SL_RESULT_SUCCESS) {
             PJ_LOG(3, (THIS_FILE, "Cannot create recorder: %d", result));
-            goto on_error;
+            strm_destroy(&stream->base);
+            return status;
         }
 
 #ifdef __ANDROID__
@@ -679,7 +685,8 @@ static pj_status_t opensl_create_stream(pjmedia_aud_dev_factory *f,
                                                SL_BOOLEAN_FALSE);
         if (result != SL_RESULT_SUCCESS) {
             PJ_LOG(3, (THIS_FILE, "Cannot realize recorder : %d", result));
-            goto on_error;
+            strm_destroy(&stream->base);
+            return status;
         }
         
         /* Get the record interface */
@@ -688,7 +695,8 @@ static pj_status_t opensl_create_stream(pjmedia_aud_dev_factory *f,
                                                     &stream->recordRecord);
         if (result != SL_RESULT_SUCCESS) {
             PJ_LOG(3, (THIS_FILE, "Cannot get record interface"));
-            goto on_error;
+            strm_destroy(&stream->base);
+            return status;
         }
         
         /* Get the buffer queue interface */
@@ -697,7 +705,8 @@ static pj_status_t opensl_create_stream(pjmedia_aud_dev_factory *f,
                      &stream->recordBufQ);
         if (result != SL_RESULT_SUCCESS) {
             PJ_LOG(3, (THIS_FILE, "Cannot get recorder buffer queue iface"));
-            goto on_error;
+            strm_destroy(&stream->base);
+            return status;
         }
         
         /* Register callback on the buffer queue */
@@ -706,7 +715,8 @@ static pj_status_t opensl_create_stream(pjmedia_aud_dev_factory *f,
                                                          (void *) stream);
         if (result != SL_RESULT_SUCCESS) {
             PJ_LOG(3, (THIS_FILE, "Cannot register recorder callback"));
-            goto on_error;
+            strm_destroy(&stream->base);
+            return status;
         }
         
         stream->recordBufferSize = bufferSize;
@@ -727,10 +737,6 @@ static pj_status_t opensl_create_stream(pjmedia_aud_dev_factory *f,
     stream->base.op = &opensl_strm_op;
     *p_aud_strm = &stream->base;
     return PJ_SUCCESS;
-    
-on_error:
-    strm_destroy(&stream->base);
-    return status;
 }
 
 /* API: Get stream parameters */
