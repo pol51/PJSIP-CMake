@@ -28,7 +28,7 @@ set(WITH_AUDIODEV_PORTAUDIO     OFF CACHE BOOL "enable portaudio audio device")
 set(WITH_AUDIODEV_COREAUDIO     OFF CACHE BOOL "enable coreaudio audio device")
 set(WITH_AUDIODEV_OPENSL        OFF CACHE BOOL "enable OpenSL audio device")
 set(WITH_AUDIODEV_ALSA          OFF CACHE BOOL "enable alsa audio device")
-set(WITH_AUDIODEV_WMME          OFF CACHE BOOL "enable WMME audio device")        # TODO: test ON
+set(WITH_AUDIODEV_WMME          OFF CACHE BOOL "enable WMME audio device")
 
 set(WITH_RESAMPLE_LIBRESAMPLE   OFF CACHE BOOL "enable libresample ressampling")
 set(WITH_RESAMPLE_LIBSAMPLERATE OFF CACHE BOOL "enable libsamplerate ressampling")# TODO: test ON
@@ -247,7 +247,7 @@ if(TARGET_MACOSX)
 endif()
 
 # Windows
-if(TARGET_WIN32)
+if(TARGET_WINDOWS)
   set(CMAKE_SYSTEM_NAME Windows)
   add_definitions(-DPJ_WIN32=1)
   set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS})
