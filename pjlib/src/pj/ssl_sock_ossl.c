@@ -51,10 +51,10 @@
 #include <openssl/x509v3.h>
 
 
-#ifdef _MSC_VER
+/*#ifdef _MSC_VER
 #  pragma comment( lib, "libeay32")
 #  pragma comment( lib, "ssleay32")
-#endif
+#endif*/
 
 
 /* Suppress compile warning of OpenSSL deprecation (OpenSSL is deprecated
