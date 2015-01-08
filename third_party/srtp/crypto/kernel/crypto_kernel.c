@@ -69,7 +69,7 @@ extern debug_module_t mod_alloc;
 
 extern cipher_type_t null_cipher;
 extern cipher_type_t aes_icm;
-extern cipher_type_t aes_cbc;
+extern cipher_type_t aes_cbc_cipher;
 
 
 /*
@@ -154,7 +154,7 @@ crypto_kernel_init() {
   status = crypto_kernel_load_cipher_type(&aes_icm, AES_128_ICM);
   if (status) 
     return status;
-  status = crypto_kernel_load_cipher_type(&aes_cbc, AES_128_CBC);
+  status = crypto_kernel_load_cipher_type(&aes_cbc_cipher, AES_128_CBC);
   if (status) 
     return status;
 
