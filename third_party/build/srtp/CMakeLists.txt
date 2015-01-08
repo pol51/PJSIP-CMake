@@ -20,9 +20,9 @@ file(GLOB_RECURSE SRTP_SRC
 file(GLOB_RECURSE SRTP_INC
   ../../srtp/include/*.h config.h)
 
-include_directories(AFTER SYSTEM  . ../../srtp/include/ ../../srtp/crypto/include/ ../../srtp)
+include_directories(BEFORE SYSTEM  . ../../srtp/include/ ../../srtp/crypto/include/ ../../srtp)
 if(WITH_BUILTIN_OPENSSL)
-  include_directories(AFTER SYSTEM  ../..)
+  include_directories(BEFORE SYSTEM  ../..)
 endif()
 add_definitions(-DHAVE_CONFIG_H)
 
