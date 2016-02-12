@@ -124,6 +124,7 @@ endif()
 if(WITH_CODEC_SPEEX)
   set(PJMEDIA-CODECS_SRC ${PJMEDIA-CODECS_SRC}
     ../src/pjmedia-codec/speex_codec.c)
+  include_directories(AFTER SYSTEM ../../third_party/speex/include)
 endif()
 
 if(WITH_CODEC_ILBC)
