@@ -45,6 +45,6 @@ set(SPEEX_SRC ${SPEEX_SRC}
 
 include_directories(AFTER SYSTEM  . ../../speex/include/)
 
-add_definitions(-DHAVE_CONFIG_H)
+add_definitions(-DHAVE_CONFIG_H -D_USE_MATH_DEFINES)
 
 add_library(speex OBJECT ${SPEEX_SRC})
