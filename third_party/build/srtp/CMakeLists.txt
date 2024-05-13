@@ -26,6 +26,24 @@ file(GLOB_RECURSE SRTP_NOOPENSSL_SRC
   ../../srtp/crypto/hash/sha1.c
 )
 
+file(GLOB_RECURSE SRTP_MBEDTLS_SRC
+  ../../srtp/crypto/*/*mbedtls.c
+)
+
+file(GLOB_RECURSE SRTP_NSS_SRC
+  ../../srtp/crypto/*/*nss.c
+)
+
+file(GLOB_RECURSE SRTP_GCM_SRC
+  ../../srtp/crypto/cipher/aes_gcm*.c
+)
+
+if(WITH_GCM)
+  add_definitions(-DGCM)
+else()
+  list(REMOVE_ITEM SRTP_SRC ${SRTP_GCM_SRC})
+endif()
+
 if(WITH_SSL)
   add_definitions(-DOPENSSL)
   list(REMOVE_ITEM SRTP_SRC ${SRTP_NOOPENSSL_SRC})
@@ -33,8 +51,20 @@ else()
   list(REMOVE_ITEM SRTP_SRC ${SRTP_OPENSSL_SRC})
 endif()
 
+if(WITH_MBEDTLS)
+  add_definitions(-DMBEDTLS)
+else()
+  list(REMOVE_ITEM SRTP_SRC ${SRTP_MBEDTLS_SRC})
+endif()
+
+if(WITH_NSS)
+  add_definitions(-DNSS)
+else()
+  list(REMOVE_ITEM SRTP_SRC ${SRTP_NSS_SRC})
+endif()
+
 file(GLOB_RECURSE SRTP_INC
-  ../../srtp/include/*.h config.h)
+  ../../srtp/include/*.h config.h ../../srtp/crypto/include/*.h)
 
 include_directories(AFTER SYSTEM  . ../../srtp/include/ ../../srtp/crypto/include/ ../../srtp)
 if(WITH_BUILTIN_OPENSSL)
