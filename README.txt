@@ -37,6 +37,9 @@ Quick Info
    $ ./configure
    $ make dep && make clean && make
 
+   You might also need to install some packages like pkg-config, libasound2-dev,
+          build-essentials, cmake, libasound2-dev, linux-libc-dev
+
    Building Win32 Target with Microsoft Visual Studio
           Generally we can just do these steps:
 
@@ -447,11 +450,11 @@ Using Default Settings
    ...
 
    Notes:
-          The default settings build the libraries in "debug" mode 
-	  (active assert()), with default CFLAGS set to "-O2".  To change 
-	  the default CFLAGS, we can use the usual "./configure CFLAGS='-g'" 
-	  construct. To build in "release" mode, and deactivate assert(), 
-	  we can use "./configure CFLAGS='-DNDEBUG'".	  
+          The default settings build the libraries in "debug" mode
+	  (active assert()), with default CFLAGS set to "-O2".  To change
+	  the default CFLAGS, we can use the usual "./configure CFLAGS='-g'"
+	  construct. To build in "release" mode, and deactivate assert(),
+	  we can use "./configure CFLAGS='-DNDEBUG'".
 
     Features Customization
 
