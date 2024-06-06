@@ -6,4 +6,4 @@
 	url = https://github.com/pol51/OpenSSL-CMake.git
 [submodule "third_party/opus"]
 	path = third_party/opus
-	url = https://git.xiph.org/opus.git
+	url = https://github.com/xiph/opus.git
